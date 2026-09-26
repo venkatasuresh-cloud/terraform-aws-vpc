@@ -62,12 +62,12 @@ run "two_az_network_layout" {
   }
 
   assert {
-  condition = (
-    local.future_az_cidr_blocks["public"] == "10.50.2.0/24" &&
-    local.future_az_cidr_blocks["private"] == "10.50.5.0/24" &&
-    local.future_az_cidr_blocks["database"] == "10.50.8.0/24"
-  )
+    condition = (
+      local.future_az_cidr_blocks["public"] == "10.50.2.0/24" &&
+      local.future_az_cidr_blocks["private"] == "10.50.5.0/24" &&
+      local.future_az_cidr_blocks["database"] == "10.50.8.0/24"
+    )
 
-  error_message = "Future third-AZ CIDR reservations are incorrect."
-}
+    error_message = "Future third-AZ CIDR reservations are incorrect."
+  }
 }
