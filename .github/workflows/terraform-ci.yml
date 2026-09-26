@@ -26,6 +26,19 @@ jobs:
         with:
           terraform_version: "1.16.2"
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.64.0
+
+      - name: Initialize TFLint
+        run: tflint --init
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run TFLint
+        run: tflint --format compact
+
       - name: Check Terraform formatting
         run: terraform fmt -check -recursive
 
