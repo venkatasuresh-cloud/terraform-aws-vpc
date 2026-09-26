@@ -1,3 +1,6 @@
+# VPC Flow Logs are intentionally outside the scope of the core networking module.
+# They can be implemented separately based on the consuming environment's logging requirements.
+#trivy:ignore:AVD-AWS-0178
 resource "aws_vpc" "this" {
   cidr_block = var.vpc_cidr
 

@@ -36,6 +36,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      - name: Run Trivy IaC security scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: CRITICAL,HIGH,MEDIUM
+          exit-code: "1"
+          format: table
+
       - name: Run TFLint
         run: tflint --format compact
 
