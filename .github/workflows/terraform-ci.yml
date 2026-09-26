@@ -35,6 +35,9 @@ jobs:
       - name: Validate root module
         run: terraform validate
 
+      - name: Run Terraform tests
+        run: terraform test -no-color
+
       - name: Initialize two-AZ example
         working-directory: examples/two-az
         run: terraform init -backend=false
