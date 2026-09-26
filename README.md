@@ -441,25 +441,15 @@ The examples demonstrate how a root Terraform configuration consumes the reusabl
 
 The module has been validated using:
 
-```bash
-terraform fmt
-terraform validate
-terraform plan
-```
+- `terraform fmt`
+- `terraform validate`
+- `terraform test`
+- TFLint static analysis
+- Trivy IaC security scanning
+- 2-AZ and 3-AZ Terraform plans
+- Deployment verification in an AWS sandbox environment
 
-The current example plans produce:
-
-```text
-Two-AZ example
-Plan: 26 to add, 0 to change, 0 to destroy
-
-Three-AZ example
-Plan: 37 to add, 0 to change, 0 to destroy
-```
-
-The three-AZ plan also confirms that enabling the third Availability Zone consumes the pre-reserved subnet CIDRs while preserving the existing AZ-A and AZ-B CIDRs.
-
-At this stage, validation has focused on Terraform configuration and planning. AWS deployment testing will be performed separately before describing the module as production-ready.
+The deployment test confirmed VPC creation, subnet allocation, route table associations, per-AZ NAT Gateway routing, and isolated database subnet behavior.
 
 ## Current Scope
 
