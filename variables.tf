@@ -9,12 +9,17 @@ variable "name" {
 }
 
 variable "vpc_cidr" {
-  description = "IPv4 CIDR block assigned to the VPC."
+  description = "IPv4 CIDR block assigned to the VPC. This module supports VPC CIDR prefixes from /16 through /24."
   type        = string
 
   validation {
-    condition     = can(cidrnetmask(var.vpc_cidr))
-    error_message = "vpc_cidr must be a valid IPv4 CIDR block."
+    condition = (
+      can(cidrnetmask(var.vpc_cidr)) &&
+      tonumber(split("/", var.vpc_cidr)[1]) >= 16 &&
+      tonumber(split("/", var.vpc_cidr)[1]) <= 24
+    )
+
+    error_message = "vpc_cidr must be a valid IPv4 CIDR block with a prefix length between /16 and /24."
   }
 }
 
@@ -58,4 +63,40 @@ variable "tags" {
 
     error_message = "Environment, Application, and Managed_by tag values must not be empty."
   }
+}
+
+variable "subnet_prefix_length" {
+  description = "Prefix length used for subnets created within the VPC. If not provided, the module automatically allocates enough address space for 16 subnet slots."
+  type        = number
+  default     = null
+
+  validation {
+    condition = (
+      var.subnet_prefix_length == null ||
+      (
+        var.subnet_prefix_length >= tonumber(split("/", var.vpc_cidr)[1]) + 4 &&
+        var.subnet_prefix_length <= 28
+      )
+    )
+
+    error_message = "subnet_prefix_length must provide at least 16 subnet blocks within the VPC and cannot be greater than /28."
+  }
+}
+
+variable "public_subnet_tags" {
+  description = "Additional tags applied only to public subnets."
+  type        = map(string)
+  default     = {}
+}
+
+variable "private_subnet_tags" {
+  description = "Additional tags applied only to private subnets."
+  type        = map(string)
+  default     = {}
+}
+
+variable "database_subnet_tags" {
+  description = "Additional tags applied only to database subnets."
+  type        = map(string)
+  default     = {}
 }
